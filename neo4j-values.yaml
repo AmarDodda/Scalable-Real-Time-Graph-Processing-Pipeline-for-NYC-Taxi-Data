@@ -1,0 +1,55 @@
+neo4j:
+  name: my-neo4j-deployment 
+  edition: community
+  password: project1phase2
+  acceptLicenseAgreement: "yes"
+
+  plugins:
+    - "graph-data-science"
+
+  resources:
+    cpu: "1"
+    memory: "2Gi"
+
+volumes:
+  data:
+    mode: defaultStorageClass
+    defaultStorageClass:
+      requests:
+        storage: 10Gi 
+      accessModes:
+        - ReadWriteOnce
+  logs:
+    mode: defaultStorageClass
+    defaultStorageClass:
+      requests:
+        storage: 2Gi   
+      accessModes:
+        - ReadWriteOnce
+  plugins:
+    mode: defaultStorageClass
+    defaultStorageClass:
+      requests:
+        storage: 2Gi   
+      accessModes:
+        - ReadWriteOnce
+
+services:
+  neo4j:
+    enabled: true
+    type: ClusterIP
+    ports:
+      http: 
+        enabled: true
+        port: 7474
+        targetPort: 7474
+      bolt: 
+        enabled: true
+        port: 7687
+        targetPort: 7687
+
+readinessProbe:
+  enabled: true
+
+livenessProbe:
+  enabled: true
